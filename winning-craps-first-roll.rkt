@@ -1,0 +1,32 @@
+#lang racket
+; Probability of winning craps on the first roll
+
+(display "Probability of winning craps on the first roll") (newline)
+
+(define (roll) ;; random number generator -- returns a value between 2 and 12 with proper dice distributions
+  (+ (+ 1 (random 6)) ;; (sums of two discrete random variables uniformly distributed between 1 and 6, inclusive)
+     (+ 1 (random 6))))
+
+(define (win-count n)
+  (cond ((= n 0) 0) ;; base case --> once we hit 0 rolls, we just return 0 (the function will return the sum of all wins)
+        (#t (let ((r (roll))) ;; otherwise, let r be a random number from 2 to 12, with the probability distribution maintained because of the way the (roll) function works
+                (if (or (= r 7) (= r 11)) ;; if the sum is 7 or 11
+                    (+ 1 (win-count(- n 1))) ;; then we'll add 1 to the function called again on (n - 1)
+                    (win-count(- n 1))))))) ;; otherwise we call the function
+(win-count 100) ;; testing
+(define (crap-luck-percent x) ;; just converts the decimal into a percentage
+  (* (/ (win-count x)
+        x)
+     100.0))
+(display "100 rolls") (newline)
+(crap-luck-percent 100)
+(display "1000 rolls") (newline)
+(crap-luck-percent 1000)
+(display "10000 rolls") (newline)
+(crap-luck-percent 10000)
+(display "100000 rolls") (newline)
+(crap-luck-percent 100000)
+(display "1000000 rolls") (newline)
+(crap-luck-percent 1000000)
+(display "The percentage approaches 22.2%.")
+;The percentage approaches 22.2%.

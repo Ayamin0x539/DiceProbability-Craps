@@ -1,0 +1,1 @@
+Calculates the probability of winning craps on the first roll through empirical sampling.
